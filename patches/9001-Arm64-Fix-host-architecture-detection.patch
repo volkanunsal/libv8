@@ -1,0 +1,37 @@
+From f7b393110c0bc58f4fde7589397b5f931a18ea4b Mon Sep 17 00:00:00 2001
+From: Pierre Langlois <pierre.langlois@arm.com>
+Date: Tue, 07 Nov 2017 14:26:17 +0000
+Subject: [PATCH] Arm64: Fix host architecture detection
+
+This allows the install-sysroot.py script to run as a hook on an Arm64
+platform. This was tested in v8 and allows us to run `gclient sync` natively.
+
+Bug: v8:5075
+Change-Id: Ie2f11a5a6e30973be7ab4ef032abb8c3c7e9591b
+Reviewed-on: https://chromium-review.googlesource.com/756704
+Reviewed-by: John Budorick <jbudorick@chromium.org>
+Commit-Queue: John Budorick <jbudorick@chromium.org>
+Cr-Commit-Position: refs/heads/master@{#514463}
+---
+
+diff --git a/build/detect_host_arch.py b/build/detect_host_arch.py
+index 8d6a1ba..0e491bc 100755
+--- a/build/detect_host_arch.py
++++ b/build/detect_host_arch.py
+@@ -21,6 +21,8 @@
+     host_arch = 'x64'
+   elif host_arch.startswith('arm'):
+     host_arch = 'arm'
++  elif host_arch.startswith('aarch64'):
++    host_arch = 'arm64'
+   elif host_arch.startswith('mips'):
+     host_arch = 'mips'
+   elif host_arch.startswith('ppc'):
+@@ -35,6 +37,8 @@
+   # the python binary.
+   if host_arch == 'x64' and platform.architecture()[0] == '32bit':
+     host_arch = 'ia32'
++  if host_arch == 'arm64' and platform.architecture()[0] == '32bit':
++    host_arch = 'arm'
+
+   return host_arch
