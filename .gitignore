@@ -5,7 +5,6 @@
 .rbx/
 Gemfile.lock
 Makefile
-pkg/*
 tmp/*
 lib/libv8/build/*
 lib/libv8/VERSION
