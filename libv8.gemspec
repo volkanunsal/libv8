@@ -12,21 +12,7 @@ Gem::Specification.new do |s|
   s.description = %q{Distributes the V8 JavaScript engine in binary and source forms in order to support fast builds of The Ruby Racer}
   s.license     = "MIT"
 
-  s.rubyforge_project = "libv8"
+  s.files  = `git ls-files`.split("\n")
 
-  s.files  = `git ls-files`.split("\n").reject {|f| f =~ /^release\//}
-
-  submodules = `git submodule --quiet foreach 'echo $path'`.split("\n").map(&:chomp)
-  submodules.each do |submodule|
-    s.files += Dir.chdir(submodule) do
-      `git ls-files`.split("\n").reject {|f| f =~ /^test/}.map {|f| "#{submodule}/#{f}"}
-    end
-  end
-
-  s.extensions = ["ext/libv8/extconf.rb"]
-  s.require_paths = ["lib", "ext"]
-
-  s.add_development_dependency 'rake', '~> 12'
-  s.add_development_dependency 'rake-compiler', '~> 0'
-  s.add_development_dependency 'rspec', '~> 3'
+  s.require_paths = ["lib"]
 end
